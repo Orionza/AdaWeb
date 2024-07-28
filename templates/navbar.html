@@ -1,0 +1,46 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'images/adalogo.png' %}" alt="Logo" width="200" height="100">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item {% if request.path == '/about/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'about' %}">About</a>
+            </li>
+            <li class="nav-item {% if request.path == '/services/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'services' %}">Services</a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item {% if request.path == '/profile/' %}active{% endif %}">
+                    <a class="nav-link" href="#">{{ user.first_name }}</a>
+                </li>
+                <li class="nav-item {% if request.path == '/logout/' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item {% if request.path == '/login/' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item {% if request.path == '/register/' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+
+
+
+
+
+
+
