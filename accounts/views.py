@@ -36,9 +36,9 @@ def about(request):
     return render(request, 'about.html')
 
 def services(request):
-    return render(request, 'services.html')
+    return render(request, 'services.html')#buralar da dolacak
 
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('home') 
 
