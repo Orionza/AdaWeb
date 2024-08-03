@@ -1,17 +1,51 @@
-<!-- templates/services.html -->
 {% extends 'base.html' %}
+
+{% block title %}Hizmetlerimiz{% endblock %}
 {% load static %}
-
-
-{% block title %}Services - Ada Yazılım{% endblock %}
-
 {% block content %}
-<div class="card">
-    <div class="card-header">
-        <h3 class="text-center">Our Services</h3>
-    </div>
-    <div class="card-body text-center">
-        <p>Here we will list the services provided by Ada Yazılım.</p>
+<div class="container">
+    <h2>Hizmetlerimiz</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card custom-card">
+                <a href="{% url 'kasko_detail' %}">
+                    <img src="{% static 'images/araba.webp' %}" class="card-img-top" alt="Kasko">
+                </a>
+                <div class="card-body">
+                    <p class="card-text">Kasko</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card custom-card">
+                <a href="https://www.orneklink.com">
+                    <img src="{% static 'images/saglik.webp' %}" class="card-img-top" alt="Sağlık">
+                </a>
+                <div class="card-body">
+                    <p class="card-text">Sağlık</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card custom-card">
+                <a href="https://www.orneklink.com">
+                    <img src="{% static 'images/ev.webp' %}" class="card-img-top" alt="Konut">
+                </a>
+                <div class="card-body">
+                    <p class="card-text">Konut</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card custom-card">
+                <a href="https://www.orneklink.com">
+                    <img src="{% static 'images/dask.webp' %}" class="card-img-top" alt="Dask">
+                </a>
+                <div class="card-body">
+                    <p class="card-text">Dask</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -4,6 +4,11 @@ from django.contrib.auth import authenticate, login as auth_login
 from .forms import UserRegistrationForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.template.loader import get_template
+from django.http import HttpResponse
+
+
 
 def register(request):
     if request.method == 'POST':
@@ -42,3 +47,9 @@ def logout_view(request):
     logout(request)
     return redirect('home') 
 
+@login_required
+def user_profile(request):
+    return render(request, 'accounts/user_profile.html')
+
+def kasko_detail(request):
+    return render(request, 'services/kasko_detail.html')

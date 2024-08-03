@@ -5,6 +5,8 @@ from accounts import views as account_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('', account_views.home, name='home'),  # Ana sayfa URL'i
+    path('', account_views.home, name='home'),
+    path('services/', include('services.urls')),
+    
 ]
 

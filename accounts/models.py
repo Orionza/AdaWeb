@@ -2,6 +2,9 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.contrib.auth.models import User
+from django.conf import settings
+
 
 class MyUserManager(BaseUserManager):
     def create_user(self, Id_No, password=None, **extra_fields):
@@ -52,3 +55,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return self.is_superuser
+    
+
+
+
+
