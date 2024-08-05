@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme Ekranı</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container mt-5">
+        <h2>Ödeme Ekranı</h2>
+        <form method="post" action="{% url 'payment' police_id=police.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="kredi_kart_no">Kredi Kartı No:</label>
+                <input type="text" class="form-control" id="kredi_kart_no" name="kredi_kart_no" required>
+            </div>
+            <div class="form-group">
+                <label for="kredi_kart_sahibi">Kredi Kartı Sahibi:</label>
+                <input type="text" class="form-control" id="kredi_kart_sahibi" name="kredi_kart_sahibi" required>
+            </div>
+            <div class="form-group">
+                <label for="son_kullanma_tarihi">Son Kullanma Tarihi (MM/YY):</label>
+                <input type="text" class="form-control" id="son_kullanma_tarihi" name="son_kullanma_tarihi" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV:</label>
+                <input type="text" class="form-control" id="cvv" name="cvv" required>
+            </div>
+            <div class="form-group">
+                <label for="odeme_tutari">Sepet Tutarı:</label>
+                <input type="text" class="form-control" id="odeme_tutari" name="odeme_tutari" value="{{ police.prim }}" readonly>
+            </div>
+            <button type="submit" class="btn btn-primary">Ödeme Yap</button>
+        </form>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

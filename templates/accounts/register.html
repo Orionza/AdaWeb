@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Kayıt Ol</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -15,13 +15,55 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">Register</h3>
+                        <h3 class="text-center">Kayıt Ol</h3>
                     </div>
                     <div class="card-body">
                         <form method="post">
                             {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            <div class="form-group">
+                                <label for="id_number">Kimlik Numarası:</label>
+                                <input type="text" name="id_number" id="id_number" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="first_name">Ad:</label>
+                                <input type="text" name="first_name" id="first_name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name">Soyad:</label>
+                                <input type="text" name="last_name" id="last_name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">Şehir:</label>
+                                <input type="text" name="city" id="city" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="district">İlçe:</label>
+                                <input type="text" name="district" id="district" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Telefon:</label>
+                                <input type="text" name="phone" id="phone" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-posta:</label>
+                                <input type="email" name="email" id="email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Parola:</label>
+                                <input type="password" name="password" id="password" class="form-control" required>
+                                <small class="form-text text-muted">
+                                    Parolanız diğer kişisel bilgilerinizle çok benzer olamaz.<br>
+                                    Parolanız en az 8 karakter içermelidir.<br>
+                                    Parolanız yaygın olarak kullanılan bir parola olamaz.<br>
+                                    Parolanız tamamen sayısal olamaz.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="password2">Parola (Tekrar):</label>
+                                <input type="password" name="password2" id="password2" class="form-control" required>
+                                <small class="form-text text-muted">Doğrulama için parolanızı tekrar girin.</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Kayıt Ol</button>
                         </form>
                     </div>
                 </div>
