@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Kayıt Ol</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <!-- Genel hata mesajları -->
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.non_field_errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Kimlik Numarası -->
+                            <div class="form-group">
+                                <label for="Id_No">Kimlik Numarası:</label>
+                                <input type="text" name="Id_No" id="Id_No" class="form-control" value="{{ form.Id_No.value|default_if_none:'' }}" required>
+                                {% if form.Id_No.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.Id_No.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Ad -->
+                            <div class="form-group">
+                                <label for="first_name">Ad:</label>
+                                <input type="text" name="first_name" id="first_name" class="form-control" value="{{ form.first_name.value|default_if_none:'' }}" required>
+                                {% if form.first_name.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.first_name.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Soyad -->
+                            <div class="form-group">
+                                <label for="last_name">Soyad:</label>
+                                <input type="text" name="last_name" id="last_name" class="form-control" value="{{ form.last_name.value|default_if_none:'' }}" required>
+                                {% if form.last_name.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.last_name.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Şehir -->
+                            <div class="form-group">
+                                <label for="city">Şehir:</label>
+                                <input type="text" name="city" id="city" class="form-control" value="{{ form.city.value|default_if_none:'' }}" required>
+                                {% if form.city.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.city.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- İlçe -->
+                            <div class="form-group">
+                                <label for="district">İlçe:</label>
+                                <input type="text" name="district" id="district" class="form-control" value="{{ form.district.value|default_if_none:'' }}" required>
+                                {% if form.district.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.district.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Telefon -->
+                            <div class="form-group">
+                                <label for="phone">Telefon:</label>
+                                <input type="text" name="phone" id="phone" class="form-control" value="{{ form.phone.value|default_if_none:'' }}" required>
+                                {% if form.phone.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.phone.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- E-posta -->
+                            <div class="form-group">
+                                <label for="email">E-posta:</label>
+                                <input type="email" name="email" id="email" class="form-control" value="{{ form.email.value|default_if_none:'' }}" required>
+                                {% if form.email.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.email.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Parola -->
+                            <div class="form-group">
+                                <label for="password1">Parola:</label>
+                                <input type="password" name="password1" id="password1" class="form-control" required>
+                                <small class="form-text text-muted">
+                                    Parolanız diğer kişisel bilgilerinizle çok benzer olamaz.<br>
+                                    Parolanız en az 8 karakter içermelidir.<br>
+                                    Parolanız yaygın olarak kullanılan bir parola olamaz.<br>
+                                    Parolanız tamamen sayısal olamaz.
+                                </small>
+                                {% if form.password1.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.password1.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Parola Tekrar -->
+                            <div class="form-group">
+                                <label for="password2">Parola (Tekrar):</label>
+                                <input type="password" name="password2" id="password2" class="form-control" required>
+                                <small class="form-text text-muted">Doğrulama için parolanızı tekrar girin.</small>
+                                {% if form.password2.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.password2.errors %}
+                                            <li class="text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-block">Kayıt Ol</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

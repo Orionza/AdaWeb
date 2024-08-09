@@ -1,0 +1,24 @@
+<form method="post" action="{% url 'dask_detail' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_bina_tipi">Bina Tipi:</label>
+        {{ form.bina_tipi }}
+    </div>
+    <div class="form-group">
+        <label for="id_bina_yasi">Bina Yaşı:</label>
+        {{ form.bina_yasi }}
+    </div>
+    <div class="form-group">
+        <label for="id_kat_sayisi">Kat Sayısı:</label>
+        {{ form.kat_sayisi }}
+    </div>
+    <div class="form-group">
+        <label for="id_bina_alani">Bina Alanı (m²):</label>
+        {{ form.bina_alani }}
+    </div>
+    <div class="form-group">
+        <label for="id_risk_bolgesi">Risk Bölgesi:</label>
+        {{ form.risk_bolgesi }}
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Teklif Al</button>
+</form>

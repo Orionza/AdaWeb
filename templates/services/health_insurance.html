@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Sağlık Sigorta Planları{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Sağlık Sigorta Planları</h2>
+    <div class="row">
+        {% for plan in saglik_planlari %}
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ plan.plan_adi }}</h5>
+                    <p class="card-text">Yatarak Tedavi: {{ plan.yatarak_tedavi|yesno:"Evet,Hayır" }}</p>
+                    <p class="card-text">Ayakta Tedavi: {{ plan.ayakta_tedavi|yesno:"Evet,Hayır" }}</p>
+                    <p class="card-text">Asistans Paketi: {{ plan.asistans_paketi|yesno:"Evet,Hayır" }}</p>
+                    <p class="card-text">Doktor Danışmanlık Hizmetleri: {{ plan.doktor_danismanlik_hizmetleri|yesno:"Evet,Hayır" }}</p>
+                    <p class="card-text">Fiyat: {{ plan.fiyat }} TL</p>
+                    <a href="{% url 'plan_select' plan.id %}" class="btn btn-primary">Planı Seç</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}

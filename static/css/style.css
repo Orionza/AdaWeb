@@ -1,0 +1,158 @@
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #343a40;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.navbar-nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-nav li {
+    margin-right: 1rem;
+}
+
+.navbar-nav li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.3rem; /* Metin boyutunu büyüttük */
+}
+
+.navbar-nav li a:hover {
+    color: #007bff;
+}
+
+.navbar-nav .active {
+    color: #007bff;
+    font-weight: bold; /* Aktif olan sayfanın kalın görünmesi için */
+}
+
+.text-center {
+    color: black;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #343a40;
+    color: white;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+}
+
+.card-header h3 {
+    color: black; /* card-header içindeki h3 etiketini siyah yapar */
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.btn-primary {
+    width: 100%;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.card {
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.card-img-top {
+    width: 100%; /* Resmin genişliğini ayarlayın */
+    height: 150px; /* Resmin yüksekliğini ayarlayın */
+    object-fit: cover; /* Resmi kartın içine sığdır */
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.custom-card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+.custom-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+h2 {
+    text-align: center;
+}
+
+

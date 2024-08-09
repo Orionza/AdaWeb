@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme Başarılı</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container mt-5">
+        <h2>Ödeme Başarılı</h2>
+        <p>Poliçeniz başarıyla oluşturuldu.</p>
+
+        <h3>Poliçe Bilgileri</h3>
+        <p>Poliçe No: {{ police.police_no }}</p>
+        <p>Müşteri No: {{ police.musteri_no }}</p>
+        <p>Prim: {{ police.prim }}</p>
+        <p>Başlangıç Tarihi: {{ police.baslangic_tarihi }}</p>
+        <p>Bitiş Tarihi: {{ police.bitis_tarihi }}</p>
+
+        {% if police.brans_kodu == '610' %}
+        <!-- Sağlık Sigortası Bilgileri -->
+        <h3>Sağlık Sigortası Bilgileri</h3>
+        <p>Yatarak Tedavi: {{ saglik_bilgileri.yatarak_tedavi }}</p>
+        <p>Ayakta Tedavi: {{ saglik_bilgileri.ayakta_tedavi }}</p>
+        <p>Asistans Paketi: {{ saglik_bilgileri.asistans_paketi }}</p>
+        <p>Doktor Danışmanlık Hizmetleri: {{ saglik_bilgileri.doktor_danismanlik_hizmetleri }}</p>
+        {% elif police.brans_kodu == '340' %}
+        <!-- Kasko Sigortası Bilgileri -->
+        <h3>Araç Bilgileri</h3>
+        <p>Plaka İl Kodu: {{ arac_bilgileri.plaka_il_kodu }}</p>
+        <p>Plaka Kodu: {{ arac_bilgileri.plaka_kodu }}</p>
+        <p>Araç Marka: {{ arac_bilgileri.arac_marka }}</p>
+        <p>Araç Model: {{ arac_bilgileri.arac_model }}</p>
+        <p>Araç Model Yılı: {{ arac_bilgileri.arac_model_yili }}</p>
+        {% elif police.brans_kodu == '199' %}
+        <!-- DASK Sigortası Bilgileri -->
+        <h3>DASK Sigortası Bilgileri</h3>
+        <p>Bina Tipi: {{ dask_bilgileri.bina_tipi }}</p>
+        <p>Bina Yaşı: {{ dask_bilgileri.bina_yasi }}</p>
+        <p>Kat Sayısı: {{ dask_bilgileri.kat_sayisi }}</p>
+        <p>Bina Alanı (m²): {{ dask_bilgileri.bina_alani }}</p>
+        <p>Risk Bölgesi: {{ dask_bilgileri.risk_bolgesi }}</p>
+        {% endif %}
+
+        <h3>Ödeme Bilgileri</h3>
+        <p>Ödeme Tutarı: {{ odeme_bilgileri.odeme_tutari }}</p>
+        <p>Ödeme Tarihi: {{ odeme_bilgileri.odeme_tarihi }}</p>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

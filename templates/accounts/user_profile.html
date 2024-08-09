@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ user.first_name }}'in Profili</h2>
+<ul>
+    {% for policy in user_policies %}
+    <li>{{ policy.policy_number }} - {{ policy.policy_type }} ({{ policy.start_date }} - {{ policy.end_date }})</li>
+    {% endfor %}
+</ul>
+{% endblock %}
