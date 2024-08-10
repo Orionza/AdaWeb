@@ -13,20 +13,10 @@ class DaskForm(forms.ModelForm):
     class Meta:
         model = DaskBilgileri
         fields = ['bina_tipi', 'bina_yasi', 'kat_sayisi', 'bina_alani', 'risk_bolgesi']
-
-    BINA_TIPI_CHOICES = [
-        ('Betonarme', 'Betonarme'),
-        ('Çelik', 'Çelik'),
-        ('Ahşap', 'Ahşap'),
-        ('Yığma', 'Yığma'),
-    ]
-
-    RISK_BOLGESI_CHOICES = [
-        ('1', 'Bölge 1 (En yüksek risk)'),
-        ('2', 'Bölge 2'),
-        ('3', 'Bölge 3'),
-        ('4', 'Bölge 4'),
-    ]
-
-    bina_tipi = forms.ChoiceField(choices=BINA_TIPI_CHOICES)
-    risk_bolgesi = forms.ChoiceField(choices=RISK_BOLGESI_CHOICES)
+        widgets = {
+            'bina_tipi': forms.Select(attrs={'class': 'form-control'}),
+            'bina_yasi': forms.NumberInput(attrs={'class': 'form-control'}),
+            'kat_sayisi': forms.NumberInput(attrs={'class': 'form-control'}),
+            'bina_alani': forms.NumberInput(attrs={'class': 'form-control'}),
+            'risk_bolgesi': forms.Select(attrs={'class': 'form-control'}),
+        }

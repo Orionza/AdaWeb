@@ -10,7 +10,7 @@ class Police(models.Model):
 
     police_no = models.IntegerField(unique=True)
     musteri_no = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    status = models.CharField(max_length=1, choices=POLICE_STATUS_CHOICES)
+    status = models.CharField(max_length=1, choices=POLICE_STATUS_CHOICES, null= False, blank= False)
     brans_kodu = models.CharField(max_length=3)
     prim = models.DecimalField(max_digits=10, decimal_places=2)
     onaylayan = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='onaylayan', on_delete=models.CASCADE)

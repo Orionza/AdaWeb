@@ -124,6 +124,8 @@ def payment(request, police_id):
 
     return render(request, 'services/payment.html', {'police': police})
 
+
+
 # Ödeme Başarılı
 def payment_success(request, police_id):
     police = Police.objects.get(id=police_id)
@@ -276,13 +278,11 @@ def dask_detail(request):
             police.prim = fiyat
             police.save()
 
-            return render(request, 'services/dask_detail.html', {
-                'form': form,
-                'prim_tutari': fiyat,
-                'police_id': police.id,
-            })
+            # Ödeme sayfasına yönlendir
+            return redirect('payment', police_id=police.id)
+
         else:
-            return render(request, 'services/dask_detail.html', {'form': form, 'error': 'Form geçerli değil'})
+            return render(request, 'services/dask_detail.html', {'form': form, 'error': 'Form geçerli değil', 'form_errors': form.errors})
     else:
         form = DaskForm()
 
