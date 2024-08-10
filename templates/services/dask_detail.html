@@ -38,16 +38,17 @@
                                 Hesaplanan Teklif Fiyatı: <strong>{{ fiyat }} TL</strong>
                             </div>
                         {% endif %}
-                        
-                        <button type="submit" class="btn btn-primary btn-block">Teklif Al</button>
-                    </form>
 
-                    {% if show_policelestir %}
-                        <form method="post" action="{% url 'payment' police_id %}" class="mt-3">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-success btn-block">Poliçeleştir</button>
-                        </form>
-                    {% endif %}
+                        {% if show_policelestir %}
+                            <form method="post" action="{% url 'dask_detail' %}" class="mt-3">
+                                {% csrf_token %}
+                                <input type="hidden" name="police_id" value="{{ police_id }}">
+                                <button type="submit" name="policelestir" class="btn btn-success btn-block">Poliçeleştir</button>
+                            </form>
+                        {% else %}
+                            <button type="submit" name="teklif_al" class="btn btn-primary btn-block">Teklif Al</button>
+                        {% endif %}
+                    </form>
                 </div>
             </div>
         </div>

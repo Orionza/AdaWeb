@@ -246,47 +246,59 @@ def plan_select(request, plan_id):
 def dask_detail(request):
     if request.method == 'POST':
         form = DaskForm(request.POST)
-        if form.is_valid():
-            # Benzersiz bir police_no oluştur
-            police_no = random.randint(10000000, 99999999)
-            while Police.objects.filter(police_no=police_no).exists():
+        if 'teklif_al' in request.POST:  # Teklif Al butonuna basıldıysa
+            if form.is_valid():
+                # Benzersiz bir police_no oluştur
                 police_no = random.randint(10000000, 99999999)
+                while Police.objects.filter(police_no=police_no).exists():
+                    police_no = random.randint(10000000, 99999999)
 
-            # DASK poliçesi oluştur
-            police = Police.objects.create(
-                police_no=police_no,
-                musteri_no=request.user,
-                status='T',  # Başlangıçta Teklif statüsünde
-                brans_kodu='199',  # DASK branş kodu
-                prim=0,  # Başlangıçta prim 0 olarak kaydedilecek, teklif hesaplanacak
-                onaylayan=request.user,
-                tanzim_tarihi=timezone.now(),
-                baslangic_tarihi=timezone.now(),
-                bitis_tarihi=timezone.now() + timezone.timedelta(days=365)  # 1 yıllık poliçe
-            )
+                # DASK poliçesi oluştur
+                police = Police.objects.create(
+                    police_no=police_no,
+                    musteri_no=request.user,
+                    status='T',  # Başlangıçta Teklif statüsünde
+                    brans_kodu='199',  # DASK branş kodu
+                    prim=0,  # Başlangıçta prim 0 olarak kaydedilecek, teklif hesaplanacak
+                    onaylayan=request.user,
+                    tanzim_tarihi=timezone.now(),
+                    baslangic_tarihi=timezone.now(),
+                    bitis_tarihi=timezone.now() + timezone.timedelta(days=365)  # 1 yıllık poliçe
+                )
 
-            # Formu kaydet, police_no'yu ilişkilendir
-            dask_bilgileri = form.save(commit=False)
-            dask_bilgileri.police_no = police
+                # Formu kaydet, police_no'yu ilişkilendir
+                dask_bilgileri = form.save(commit=False)
+                dask_bilgileri.police_no = police
 
-            # Fiyatlandırma işlemi
-            fiyat = hesapla_dask_fiyati(dask_bilgileri)
-            dask_bilgileri.teklif_fiyati = fiyat
-            dask_bilgileri.save()
+                # Fiyatlandırma işlemi
+                fiyat = hesapla_dask_fiyati(dask_bilgileri)
+                dask_bilgileri.teklif_fiyati = fiyat
+                dask_bilgileri.save()
 
-            # Poliçe primini güncelle
-            police.prim = fiyat
-            police.save()
+                # Poliçe primini güncelle
+                police.prim = fiyat
+                police.save()
 
-            # Ödeme sayfasına yönlendir
-            return redirect('payment', police_id=police.id)
+                # Poliçeleştir butonunu göster
+                return render(request, 'services/dask_detail.html', {
+                    'form': form,
+                    'fiyat': fiyat,
+                    'police_id': police.id,
+                    'show_policelestir': True
+                })
+
+        elif 'policelestir' in request.POST:  # Poliçeleştir butonuna basıldıysa
+            police_id = request.POST.get('police_id')
+            return redirect('payment', police_id=police_id)
 
         else:
-            return render(request, 'services/dask_detail.html', {'form': form, 'error': 'Form geçerli değil', 'form_errors': form.errors})
+            return render(request, 'services/dask_detail.html', {'form': form, 'error': 'Form geçerli değil'})
     else:
         form = DaskForm()
 
     return render(request, 'services/dask_detail.html', {'form': form})
+
+
 
 def hesapla_dask_fiyati(dask_bilgileri):
     # Fiyat hesaplama işlemi
