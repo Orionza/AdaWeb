@@ -4,7 +4,7 @@ from .models import MyUser
 
 class MyUserAdmin(UserAdmin):
     model = MyUser
-    list_display = ('id','Id_No', 'first_name', 'last_name', 'email', 'is_staff', 'is_active',)
+    list_display = ('Id_No', 'first_name', 'last_name', 'email', 'is_staff', 'is_active',)
     list_filter = ('is_staff', 'is_active',)# degisebilir
     fieldsets = (
         (None, {'fields': ('Id_No', 'password')}),

@@ -1,10 +1,70 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
-<h2>{{ user.first_name }}'in Profili</h2>
-<ul>
-    {% for policy in user_policies %}
-    <li>{{ policy.policy_number }} - {{ policy.policy_type }} ({{ policy.start_date }} - {{ policy.end_date }})</li>
-    {% endfor %}
-</ul>
+    
+
+    <h2>Teklif Durumundaki Poliçeler</h2>
+    {% if teklif_policeler %}
+        <table style="width:100%; border-spacing: 0 15px;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; padding: 8px;">Poliçe No</th>
+                    <th style="text-align:left; padding: 8px;">Sigorta Türü</th>
+                    <th style="text-align:left; padding: 8px;">Prim</th>
+                    <th style="text-align:left; padding: 8px;">Başlangıç Tarihi</th>
+                    <th style="text-align:left; padding: 8px;">Bitiş Tarihi</th>
+                    <th style="text-align:left; padding: 8px;">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for police in teklif_policeler %}
+                    <tr>
+                        <td style="padding: 8px;">{{ police.police_no }}</td>
+                        <td style="padding: 8px;">{{ police.brans_adi }}</td>
+                        <td style="padding: 8px;">{{ police.prim }} TL</td>
+                        <td style="padding: 8px;">{{ police.baslangic_tarihi }}</td>
+                        <td style="padding: 8px;">{{ police.bitis_tarihi }}</td>
+                        <td style="padding: 8px;">
+                            <a href="{% url 'payment' police.id %}" class="btn btn-success">Ödeme Yap</a>
+                            <a href="{% url 'iptal_et' police.id %}" class="btn btn-danger">İptal Et</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Henüz teklif durumunda olan bir poliçeniz yok.</p>
+    {% endif %}
+
+    <h2>Poliçeleşmiş Poliçeler</h2>
+    {% if policelemes_policeler %}
+        <table style="width:100%; border-spacing: 0 15px;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; padding: 8px;">Poliçe No</th>
+                    <th style="text-align:left; padding: 8px;">Sigorta Türü</th>
+                    <th style="text-align:left; padding: 8px;">Prim</th>
+                    <th style="text-align:left; padding: 8px;">Başlangıç Tarihi</th>
+                    <th style="text-align:left; padding: 8px;">Bitiş Tarihi</th>
+                    <th style="text-align:left; padding: 8px;">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for police in policelemes_policeler %}
+                    <tr>
+                        <td style="padding: 8px;">{{ police.police_no }}</td>
+                        <td style="padding: 8px;">{{ police.brans_adi }}</td>
+                        <td style="padding: 8px;">{{ police.prim }} TL</td>
+                        <td style="padding: 8px;">{{ police.baslangic_tarihi }}</td>
+                        <td style="padding: 8px;">{{ police.bitis_tarihi }}</td>
+                        <td style="padding: 8px;">
+                            <a href="{% url 'iptal_et' police.id %}" class="btn btn-danger">İptal Et</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Henüz poliçeleşmiş bir poliçeniz yok.</p>
+    {% endif %}
 {% endblock %}

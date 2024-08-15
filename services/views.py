@@ -4,6 +4,8 @@ from .models import Vehicle, Police, AracBilgileri, OdemeBilgileri, SaglikBilgil
 import random
 from django.http import JsonResponse
 from .forms import DaskForm
+from django.contrib.auth.decorators import login_required
+
 
 # Kasko Detayı
 def kasko_detail(request):
@@ -31,7 +33,7 @@ def get_offer(request):
         try:
             vehicle = Vehicle.objects.get(marka_adi=arac_marka, tip_adi=arac_model)
             kasko_degeri = getattr(vehicle, f'model_{arac_model_yili}')
-            teklif_fiyati = kasko_degeri * 0.01 if kasko_degeri > 0 else "N/A"
+            teklif_fiyati = kasko_degeri * 0.01346 if kasko_degeri > 0 else "N/A"
         except Vehicle.DoesNotExist:
             kasko_degeri = "Değer bulunamadı"
             teklif_fiyati = "N/A"
@@ -46,7 +48,7 @@ def get_offer(request):
             police_no=police_no,
             musteri_no=request.user,
             status='T',
-            brans_kodu='340',  # Kasko branş kodu
+            brans_kodu='340',  
             prim=teklif_fiyati,
             onaylayan=request.user,
             tanzim_tarihi=timezone.now(),
@@ -87,6 +89,7 @@ def get_offer(request):
     })
 
 # Ödeme İşlemi
+@login_required
 def payment(request, police_id):
     police = Police.objects.get(id=police_id)
     if request.method == 'POST':
@@ -108,14 +111,19 @@ def payment(request, police_id):
                 odeme_tarihi=timezone.now(),
             )
 
-            # Poliçe statusunu güncelle
-            police.status = 'P'
+            # Poliçe başlangıç tarihini ödeme tarihi olarak güncelle
+            police.baslangic_tarihi = timezone.now()
+
+            # Poliçe bitiş tarihini branş koduna göre güncelle
             if police.brans_kodu == '610':  # Sağlık branş kodu
                 police.bitis_tarihi = police.baslangic_tarihi + timezone.timedelta(days=365)  # 1 yıllık poliçe
             elif police.brans_kodu == '340':  # Kasko branş kodu
                 police.bitis_tarihi = police.baslangic_tarihi + timezone.timedelta(days=15)  # 15 günlük poliçe
             elif police.brans_kodu == '199':  # DASK branş kodu
                 police.bitis_tarihi = police.baslangic_tarihi + timezone.timedelta(days=365)  # 1 yıllık poliçe
+            
+            # Poliçe durumunu 'P' olarak güncelle
+            police.status = 'P'
             police.save()
 
             return redirect('payment_success', police_id=police.id)
@@ -126,11 +134,12 @@ def payment(request, police_id):
 
 
 
+
 # Ödeme Başarılı
 def payment_success(request, police_id):
     police = Police.objects.get(id=police_id)
     
-    if police.brans_kodu == '610':  # Sağlık branş kodu
+    if police.brans_kodu == '610':  
         saglik_bilgileri = SaglikBilgileri.objects.get(police_no=police)
         odeme_bilgileri = OdemeBilgileri.objects.get(police_no=police)
         saglik_bilgileri_formatted = {
@@ -145,7 +154,7 @@ def payment_success(request, police_id):
             'saglik_bilgileri': saglik_bilgileri_formatted,
             'odeme_bilgileri': odeme_bilgileri
         })
-    elif police.brans_kodu == '340':  # Kasko branş kodu
+    elif police.brans_kodu == '340':  
         arac_bilgileri = AracBilgileri.objects.get(police_no=police)
         odeme_bilgileri = OdemeBilgileri.objects.get(police_no=police)
         return render(request, 'services/payment_success.html', {
@@ -153,7 +162,7 @@ def payment_success(request, police_id):
             'arac_bilgileri': arac_bilgileri,
             'odeme_bilgileri': odeme_bilgileri
         })
-    elif police.brans_kodu == '199':  # DASK branş kodu
+    elif police.brans_kodu == '199':  
         dask_bilgileri = DaskBilgileri.objects.get(police_no=police)
         odeme_bilgileri = OdemeBilgileri.objects.get(police_no=police)
         
@@ -222,12 +231,12 @@ def plan_select(request, plan_id):
         police_no=police_no,
         musteri_no=request.user,
         status='T',
-        brans_kodu='610',  # Sağlık sigortası branş kodu
+        brans_kodu='610',  
         prim=plan.fiyat,
         onaylayan=request.user,
         tanzim_tarihi=timezone.now(),
         baslangic_tarihi=timezone.now(),
-        bitis_tarihi=timezone.now() + timezone.timedelta(days=365)  # 1 yıllık poliçe
+        bitis_tarihi=timezone.now() + timezone.timedelta(days=365)  
     )
 
     # Sağlık bilgilerini oluştur
@@ -237,7 +246,7 @@ def plan_select(request, plan_id):
         ayakta_tedavi=plan.ayakta_tedavi,
         asistans_paketi=plan.asistans_paketi,
         doktor_danismanlik_hizmetleri=plan.doktor_danismanlik_hizmetleri,
-        teklif_fiyati=plan.fiyat  # Teklif fiyatını burada kaydedin
+        teklif_fiyati=plan.fiyat  
     )
 
     # Kullanıcıyı ödeme sayfasına yönlendir
@@ -258,12 +267,12 @@ def dask_detail(request):
                     police_no=police_no,
                     musteri_no=request.user,
                     status='T',  # Başlangıçta Teklif statüsünde
-                    brans_kodu='199',  # DASK branş kodu
+                    brans_kodu='199',  
                     prim=0,  # Başlangıçta prim 0 olarak kaydedilecek, teklif hesaplanacak
                     onaylayan=request.user,
                     tanzim_tarihi=timezone.now(),
                     baslangic_tarihi=timezone.now(),
-                    bitis_tarihi=timezone.now() + timezone.timedelta(days=365)  # 1 yıllık poliçe
+                    bitis_tarihi=timezone.now() + timezone.timedelta(days=365)  
                 )
 
                 # Formu kaydet, police_no'yu ilişkilendir

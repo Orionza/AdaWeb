@@ -21,6 +21,9 @@ class Police(models.Model):
     class Meta:
         verbose_name_plural = 'Poliçeler'
 
+    def __str__(self):
+        return str(self.police_no)
+
     def save(self, *args, **kwargs):
         if not self.police_no:
             self.police_no = self.generate_unique_police_no()
@@ -170,6 +173,9 @@ class DaskBilgileri(models.Model):
     bina_alani = models.FloatField()  # metrekare olarak
     risk_bolgesi = models.CharField(max_length=50, choices=RISK_BOLGESI_CHOICES)
     teklif_fiyati = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        verbose_name_plural = 'Dask Poliçeleri'
 
     def __str__(self):
         return f"DASK - {self.police_no.police_no}"

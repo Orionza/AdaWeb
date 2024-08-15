@@ -18,6 +18,9 @@
             <li class="nav-item {% if request.path == '/policies/services/' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'services' %}">Hizmetler</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+            </li>
             {% if user.is_authenticated %}
                 <li class="nav-item {% if request.path == '/accounts/user_profile/' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'user_profile' %}">{{ user.first_name }}</a>
