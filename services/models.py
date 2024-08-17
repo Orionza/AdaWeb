@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 import random
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 class Police(models.Model):
     POLICE_STATUS_CHOICES = [
@@ -38,17 +40,20 @@ class Police(models.Model):
 class AracBilgileri(models.Model):
     police_no = models.OneToOneField(Police, on_delete=models.CASCADE)
     plaka_il_kodu = models.IntegerField()
-    plaka_kodu = models.CharField(max_length=10)
+    plaka_kodu = models.CharField(max_length=7)
     arac_marka = models.CharField(max_length=255)
     arac_model = models.CharField(max_length=255)
     arac_model_yili = models.IntegerField()
-    motor_no = models.CharField(max_length=50, blank=True)
-    sasi_no = models.CharField(max_length=50, blank=True)
+    motor_no = models.CharField(max_length=15)
+    sasi_no = models.CharField(max_length=17)
     teklif_fiyati = models.DecimalField(max_digits=10, decimal_places=2)
-    
 
     class Meta:
         verbose_name_plural = 'Poliçe Araç Bilgileri'
+
+    def __str__(self):
+        return f"{self.police_no.police_no} - {self.plaka_kodu}"
+        
 
 class OdemeBilgileri(models.Model):
     police_no = models.OneToOneField(Police, on_delete=models.CASCADE)

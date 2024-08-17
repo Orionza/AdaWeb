@@ -1,114 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Kasko Detay{% endblock %}</title>
+    <title>Kasko Sigortası Detayları</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
     {% include 'navbar.html' %}
-    
-    <div class="container mt-5">
-        {% block content %}
-        <h2>Kasko Sigortası Detayları</h2>
-        <form method="post" action="{% url 'get_offer' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="plaka_il_kodu">Plaka İl Kodu:</label>
-                <input type="text" class="form-control" id="plaka_il_kodu" name="plaka_il_kodu" value="{{ plaka_il_kodu }}" required>
-            </div>
-            <div class="form-group">
-                <label for="plaka_kodu">Plaka Kodu:</label>
-                <input type="text" class="form-control" id="plaka_kodu" name="plaka_kodu" value="{{ plaka_kodu }}" required>
-            </div>
-            <div class="form-group">
-                <label for="arac_marka">Araç Marka:</label>
-                <select class="form-control" id="arac_marka" name="arac_marka" required>
-                    <option value="">Marka Seçin</option>
-                    {% for marka in markalar %}
-                        <option value="{{ marka }}" {% if arac_marka == marka %}selected{% endif %}>{{ marka }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="arac_model_yili">Araç Model Yılı:</label>
-                <select class="form-control" id="arac_model_yili" name="arac_model_yili" required>
-                    <option value="">Model Yılı Seçin</option>
-                    {% for yil in model_yillari %}
-                        <option value="{{ yil }}" {% if arac_model_yili == yil|stringformat:"s" %}selected{% endif %}>{{ yil }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="arac_model">Araç Model:</label>
-                <select class="form-control" id="arac_model" name="arac_model" required>
-                    <option value="">Model Seçin</option>
-                    {% if arac_modeller %}
-                        {% for model in arac_modeller %}
-                            <option value="{{ model }}" {% if arac_model == model %}selected{% endif %}>{{ model }}</option>
-                        {% endfor %}
-                    {% endif %}
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Teklif Al</button>
-        </form>
 
-        {% if kasko_degeri %}
-        <p>Kasko Değeri: {{ kasko_degeri }}</p>
-        <p>Teklif Fiyatı: {{ teklif_fiyati }}</p>
-        <form method="post" action="{% url 'payment' police_id=police_id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success">Ödeme Yap</button>
-        </form>
-        {% endif %}
-        {% endblock %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h3>Kasko Sigortası Detayları</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if error_messages %}
+                            <div class="alert alert-danger">
+                                <ul>
+                                    {% for error in error_messages %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <form method="post" action="{% url 'get_offer' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="plaka_il_kodu">Plaka İl Kodu:</label>
+                                <input type="text" class="form-control" id="plaka_il_kodu" name="plaka_il_kodu" value="{{ plaka_il_kodu }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="plaka_kodu">Plaka Kodu:</label>
+                                <input type="text" class="form-control" id="plaka_kodu" name="plaka_kodu" value="{{ plaka_kodu }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="arac_marka">Araç Marka:</label>
+                                <select class="form-control" id="arac_marka" name="arac_marka" onchange="fetchModels()">
+                                    <option value="">Marka Seçiniz</option>
+                                    {% for marka in markalar %}
+                                        <option value="{{ marka }}" {% if arac_marka == marka %}selected{% endif %}>{{ marka }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="arac_model_yili">Araç Model Yılı:</label>
+                                <select class="form-control" id="arac_model_yili" name="arac_model_yili" onchange="fetchModels()">
+                                    <option value="">Yıl Seçiniz</option>
+                                    {% for yil in model_yillari %}
+                                        <option value="{{ yil }}" {% if arac_model_yili == yil %}selected{% endif %}>{{ yil }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="arac_model">Araç Model:</label>
+                                <select class="form-control" id="arac_model" name="arac_model">
+                                    <option value="">Model Seçiniz</option>
+                                    {% for model in arac_modeller %}
+                                        <option value="{{ model }}" {% if arac_model == model %}selected{% endif %}>{{ model }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="motor_no">Motor No:</label>
+                                <input type="text" class="form-control" id="motor_no" name="motor_no" value="{{ motor_no }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="sasi_no">Şasi No:</label>
+                                <input type="text" class="form-control" id="sasi_no" name="sasi_no" value="{{ sasi_no }}">
+                            </div>
+
+                            {% if kasko_degeri %}
+                                <div class="alert alert-info">
+                                    Kasko Değeri: <strong>{{ kasko_degeri }}</strong>
+                                </div>
+                            {% endif %}
+
+                            {% if teklif_fiyati %}
+                                <div class="alert alert-info">
+                                    Teklif Fiyatı: <strong>{{ teklif_fiyati }}</strong>
+                                </div>
+                            {% endif %}
+
+                            <button type="submit" class="btn btn-primary btn-block" {% if show_payment_button %}style="display: none;"{% endif %}>Teklif Al</button>
+                        </form>
+
+                        {% if show_payment_button %}
+                            <form method="post" action="{% url 'payment' police_id=police_id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-block mt-4">Ödeme Yap</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    {% include 'footer.html' %}
-    
     <script>
-    document.getElementById('arac_marka').addEventListener('change', function() {
-        var marka = this.value;
-        var modelYili = document.getElementById('arac_model_yili').value;
-        var modelSelect = document.getElementById('arac_model');
-        modelSelect.innerHTML = '<option value="">Model Seçin</option>'; // Temizle
+        function fetchModels() {
+            var marka = document.getElementById('arac_marka').value;
+            var yil = document.getElementById('arac_model_yili').value;
+            var modelSelect = document.getElementById('arac_model');
 
-        if (marka && modelYili) {
-            fetch(`/services/get_models/?marka=${marka}&yil=${modelYili}`)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(function(model) {
-                        var option = document.createElement('option');
-                        option.value = model;
-                        option.text = model;
-                        modelSelect.appendChild(option);
+            if (marka && yil) {
+                fetch(`/services/get_models/?marka=${marka}&yil=${yil}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        modelSelect.innerHTML = '<option value="">Model Seçiniz</option>';
+                        data.forEach(function(model) {
+                            var option = document.createElement('option');
+                            option.value = model;
+                            option.text = model;
+                            modelSelect.appendChild(option);
+                        });
                     });
-                });
+            } else {
+                modelSelect.innerHTML = '<option value="">Model Seçiniz</option>';
+            }
         }
-    });
-
-    document.getElementById('arac_model_yili').addEventListener('change', function() {
-        var modelYili = this.value;
-        var marka = document.getElementById('arac_marka').value;
-        var modelSelect = document.getElementById('arac_model');
-        modelSelect.innerHTML = '<option value="">Model Seçin</option>'; // Temizle
-
-        if (marka && modelYili) {
-            fetch(`/services/get_models/?marka=${marka}&yil=${modelYili}`)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(function(model) {
-                        var option = document.createElement('option');
-                        option.value = model;
-                        option.text = model;
-                        modelSelect.appendChild(option);
-                    });
-                });
-        }
-    });
     </script>
+
+    {% include 'footer.html' %}
 </body>
 </html>

@@ -3,8 +3,9 @@ from django.utils import timezone
 from .models import Vehicle, Police, AracBilgileri, OdemeBilgileri, SaglikBilgileri, SaglikPlanlar, DaskBilgileri
 import random
 from django.http import JsonResponse
-from .forms import DaskForm
+from .forms import DaskForm, AracBilgileriForm, PaymentForm
 from django.contrib.auth.decorators import login_required
+import re
 
 
 # Kasko Detayı
@@ -24,19 +25,60 @@ def get_models(request):
 # Kasko Teklifi Al
 def get_offer(request):
     if request.method == 'POST':
-        plaka_il_kodu = request.POST['plaka_il_kodu']
-        plaka_kodu = request.POST['plaka_kodu']
-        arac_marka = request.POST['arac_marka']
-        arac_model_yili = request.POST['arac_model_yili']
-        arac_model = request.POST['arac_model']
+        # Form verilerini alın
+        plaka_il_kodu = request.POST.get('plaka_il_kodu')
+        plaka_kodu = request.POST.get('plaka_kodu')
+        arac_marka = request.POST.get('arac_marka')
+        arac_model_yili = request.POST.get('arac_model_yili')
+        arac_model = request.POST.get('arac_model')
+        motor_no = request.POST.get('motor_no')
+        sasi_no = request.POST.get('sasi_no')
+
+        # Hata mesajları için boş bir liste oluşturun
+        error_messages = []
+
+        # plaka_il_kodu'nun geçerli olup olmadığını kontrol edin
+        if not plaka_il_kodu or not plaka_il_kodu.isdigit() or not (10 <= int(plaka_il_kodu) <= 99):
+            error_messages.append("Plaka il kodu 2 basamaklı bir sayı olmalıdır.")
+
+        # Plaka kodunun geçerli olup olmadığını kontrol edin
+        if not plaka_kodu or len(plaka_kodu) > 7 or not any(char.isdigit() for char in plaka_kodu) or not any(char.isalpha() for char in plaka_kodu):
+            error_messages.append("Plaka kodu maksimum 7 karakter uzunluğunda olmalı ve en az bir harf ile en az bir rakam içermelidir.")
+
+        # Motor No'nun geçerli olup olmadığını kontrol edin
+        if not motor_no or len(motor_no) != 15 or not motor_no.isalnum():
+            error_messages.append("Motor numarası 15 karakter uzunluğunda olmalı ve sadece harf ve rakam içermelidir.")
+
+        # Şasi No'nun geçerli olup olmadığını kontrol edin
+        if not sasi_no or len(sasi_no) != 17 or not sasi_no.isalnum():
+            error_messages.append("Şasi numarası 17 karakter uzunluğunda olmalı ve sadece harf ve rakam içermelidir.")
+
+        # Eğer hata mesajı varsa, formu tekrar render edin ve hata mesajlarını gösterin
+        if error_messages:
+            return render(request, 'services/kasko_detail.html', {
+                'markalar': Vehicle.objects.values_list('marka_adi', flat=True).distinct(),
+                'model_yillari': [i for i in range(2024, 2009, -1)],
+                'plaka_il_kodu': plaka_il_kodu,
+                'plaka_kodu': plaka_kodu,
+                'arac_marka': arac_marka,
+                'arac_model_yili': arac_model_yili,
+                'arac_model': arac_model,
+                'motor_no': motor_no,
+                'sasi_no': sasi_no,
+                'error_messages': error_messages,
+            })
 
         try:
             vehicle = Vehicle.objects.get(marka_adi=arac_marka, tip_adi=arac_model)
-            kasko_degeri = getattr(vehicle, f'model_{arac_model_yili}')
-            teklif_fiyati = kasko_degeri * 0.01346 if kasko_degeri > 0 else "N/A"
+            kasko_degeri = getattr(vehicle, f'model_{arac_model_yili}', 0)
+            teklif_fiyati = kasko_degeri * 0.01346 if kasko_degeri > 0 else None
         except Vehicle.DoesNotExist:
-            kasko_degeri = "Değer bulunamadı"
-            teklif_fiyati = "N/A"
+            kasko_degeri = None
+            teklif_fiyati = None
+
+        # Eğer teklif fiyatı hesaplanamamışsa, geçerli bir değeri varsayılan olarak atayabilirsiniz
+        if teklif_fiyati is None:
+            teklif_fiyati = 0
 
         # Benzersiz bir police_no oluştur
         police_no = random.randint(10000000, 99999999)
@@ -48,7 +90,7 @@ def get_offer(request):
             police_no=police_no,
             musteri_no=request.user,
             status='T',
-            brans_kodu='340',  
+            brans_kodu='340',
             prim=teklif_fiyati,
             onaylayan=request.user,
             tanzim_tarihi=timezone.now(),
@@ -58,14 +100,14 @@ def get_offer(request):
 
         AracBilgileri.objects.create(
             police_no=police,
-            plaka_il_kodu=plaka_il_kodu,
+            plaka_il_kodu=int(plaka_il_kodu),
             plaka_kodu=plaka_kodu,
             arac_marka=arac_marka,
             arac_model=arac_model,
-            arac_model_yili=arac_model_yili,
-            teklif_fiyati=teklif_fiyati,
-            motor_no='',  # Motor no eklenebilir
-            sasi_no=''  # Şasi no eklenebilir
+            arac_model_yili=int(arac_model_yili),
+            motor_no=motor_no,
+            sasi_no=sasi_no,
+            teklif_fiyati=teklif_fiyati
         )
 
         return render(request, 'services/kasko_detail.html', {
@@ -78,6 +120,8 @@ def get_offer(request):
             'arac_marka': arac_marka,
             'arac_model_yili': arac_model_yili,
             'arac_model': arac_model,
+            'motor_no': motor_no,
+            'sasi_no': sasi_no,
             'arac_modeller': Vehicle.objects.filter(marka_adi=arac_marka).exclude(**{f'model_{arac_model_yili}': 0}).values_list('tip_adi', flat=True).distinct(),
             'show_payment_button': True,
             'police_id': police.id
@@ -88,18 +132,22 @@ def get_offer(request):
         'model_yillari': [i for i in range(2024, 2009, -1)]
     })
 
+
+
 # Ödeme İşlemi
 @login_required
 def payment(request, police_id):
     police = Police.objects.get(id=police_id)
     if request.method == 'POST':
-        kredi_kart_no = request.POST.get('kredi_kart_no')
-        kredi_kart_sahibi = request.POST.get('kredi_kart_sahibi')
-        son_kullanma_tarihi = request.POST.get('son_kullanma_tarihi')
-        cvv = request.POST.get('cvv')
-        odeme_tutari = police.prim
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            # Form valid ise ödeme bilgilerini işleyin
+            kredi_kart_no = form.cleaned_data['kredi_kart_no']
+            kredi_kart_sahibi = form.cleaned_data['kredi_kart_sahibi']
+            son_kullanma_tarihi = form.cleaned_data['son_kullanma_tarihi']
+            cvv = form.cleaned_data['cvv']
+            odeme_tutari = police.prim
 
-        if kredi_kart_no and kredi_kart_sahibi and son_kullanma_tarihi and cvv:
             # Ödeme bilgilerini kaydet
             OdemeBilgileri.objects.create(
                 police_no=police,
@@ -113,68 +161,83 @@ def payment(request, police_id):
 
             # Poliçe başlangıç tarihini ödeme tarihi olarak güncelle
             police.baslangic_tarihi = timezone.now()
-
-            # Poliçe bitiş tarihini branş koduna göre güncelle
-            if police.brans_kodu == '610':  # Sağlık branş kodu
-                police.bitis_tarihi = police.baslangic_tarihi + timezone.timedelta(days=365)  # 1 yıllık poliçe
-            elif police.brans_kodu == '340':  # Kasko branş kodu
-                police.bitis_tarihi = police.baslangic_tarihi + timezone.timedelta(days=15)  # 15 günlük poliçe
-            elif police.brans_kodu == '199':  # DASK branş kodu
-                police.bitis_tarihi = police.baslangic_tarihi + timezone.timedelta(days=365)  # 1 yıllık poliçe
-            
-            # Poliçe durumunu 'P' olarak güncelle
+            police.bitis_tarihi = police.baslangic_tarihi + timezone.timedelta(days=365)
             police.status = 'P'
             police.save()
 
             return redirect('payment_success', police_id=police.id)
-        else:
-            return render(request, 'services/payment.html', {'police': police, 'error': 'Lütfen tüm alanları doldurun.'})
+    else:
+        form = PaymentForm()
 
-    return render(request, 'services/payment.html', {'police': police})
+    return render(request, 'services/payment.html', {'police': police, 'form': form})
+
+
+
 
 
 
 
 # Ödeme Başarılı
 def payment_success(request, police_id):
-    police = Police.objects.get(id=police_id)
-    
-    if police.brans_kodu == '610':  
-        saglik_bilgileri = SaglikBilgileri.objects.get(police_no=police)
+    try:
+        police = Police.objects.get(id=police_id)
+    except Police.DoesNotExist:
+        return render(request, 'services/payment_error.html', {'error': 'Poliçe bulunamadı.'})
+
+    odeme_bilgileri = None
+    saglik_bilgileri_formatted = None
+    arac_bilgileri = None
+    dask_bilgileri = None
+
+    try:
         odeme_bilgileri = OdemeBilgileri.objects.get(police_no=police)
-        saglik_bilgileri_formatted = {
-            'yatarak_tedavi': 'Evet' if saglik_bilgileri.yatarak_tedavi else 'Hayır',
-            'ayakta_tedavi': 'Evet' if saglik_bilgileri.ayakta_tedavi else 'Hayır',
-            'asistans_paketi': 'Evet' if saglik_bilgileri.asistans_paketi else 'Hayır',
-            'doktor_danismanlik_hizmetleri': 'Evet' if saglik_bilgileri.doktor_danismanlik_hizmetleri else 'Hayır'
-        }
+    except OdemeBilgileri.DoesNotExist:
+        return render(request, 'services/payment_error.html', {'error': 'Ödeme bilgileri bulunamadı.'})
+
+    if police.brans_kodu == '610':  # Sağlık sigortası
+        try:
+            saglik_bilgileri = SaglikBilgileri.objects.get(police_no=police)
+            saglik_bilgileri_formatted = {
+                'yatarak_tedavi': 'Evet' if saglik_bilgileri.yatarak_tedavi else 'Hayır',
+                'ayakta_tedavi': 'Evet' if saglik_bilgileri.ayakta_tedavi else 'Hayır',
+                'asistans_paketi': 'Evet' if saglik_bilgileri.asistans_paketi else 'Hayır',
+                'doktor_danismanlik_hizmetleri': 'Evet' if saglik_bilgileri.doktor_danismanlik_hizmetleri else 'Hayır'
+            }
+        except SaglikBilgileri.DoesNotExist:
+            return render(request, 'services/payment_error.html', {'error': 'Sağlık bilgileri bulunamadı.'})
         
         return render(request, 'services/payment_success.html', {
             'police': police,
             'saglik_bilgileri': saglik_bilgileri_formatted,
             'odeme_bilgileri': odeme_bilgileri
         })
-    elif police.brans_kodu == '340':  
-        arac_bilgileri = AracBilgileri.objects.get(police_no=police)
-        odeme_bilgileri = OdemeBilgileri.objects.get(police_no=police)
+
+    elif police.brans_kodu == '340':  # Kasko sigortası
+        try:
+            arac_bilgileri = AracBilgileri.objects.get(police_no=police)
+        except AracBilgileri.DoesNotExist:
+            return render(request, 'services/payment_error.html', {'error': 'Araç bilgileri bulunamadı.'})
+        
         return render(request, 'services/payment_success.html', {
             'police': police,
             'arac_bilgileri': arac_bilgileri,
             'odeme_bilgileri': odeme_bilgileri
         })
-    elif police.brans_kodu == '199':  
-        dask_bilgileri = DaskBilgileri.objects.get(police_no=police)
-        odeme_bilgileri = OdemeBilgileri.objects.get(police_no=police)
+
+    elif police.brans_kodu == '199':  # DASK sigortası
+        try:
+            dask_bilgileri = DaskBilgileri.objects.get(police_no=police)
+        except DaskBilgileri.DoesNotExist:
+            return render(request, 'services/payment_error.html', {'error': 'DASK bilgileri bulunamadı.'})
         
         return render(request, 'services/payment_success.html', {
             'police': police,
             'dask_bilgileri': dask_bilgileri,
             'odeme_bilgileri': odeme_bilgileri
         })
+
     else:
-        return render(request, 'services/payment_success.html', {
-            'police': police
-        })
+        return render(request, 'services/payment_error.html', {'error': 'Geçersiz branş kodu.'})
 
 # Sağlık Sigorta Planlarını Listele
 def health_insurance(request):

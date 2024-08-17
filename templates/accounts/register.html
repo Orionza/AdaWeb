@@ -33,98 +33,98 @@
                             <!-- Kimlik Numarası -->
                             <div class="form-group">
                                 <label for="Id_No">Kimlik Numarası:</label>
-                                <input type="text" name="Id_No" id="Id_No" class="form-control" value="{{ form.Id_No.value|default_if_none:'' }}" required>
+                                <input type="text" name="Id_No" id="Id_No" class="form-control {% if form.Id_No.errors %}is-invalid{% endif %}" value="{{ form.Id_No.value|default_if_none:'' }}" required>
                                 {% if form.Id_No.errors %}
-                                    <ul class="errorlist">
+                                    <div class="invalid-feedback">
                                         {% for error in form.Id_No.errors %}
-                                            <li class="text-danger">{{ error }}</li>
+                                            <p>{{ error }}</p>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% endif %}
                             </div>
                             
                             <!-- Ad -->
                             <div class="form-group">
                                 <label for="first_name">Ad:</label>
-                                <input type="text" name="first_name" id="first_name" class="form-control" value="{{ form.first_name.value|default_if_none:'' }}" required>
+                                <input type="text" name="first_name" id="first_name" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" value="{{ form.first_name.value|default_if_none:'' }}" required>
                                 {% if form.first_name.errors %}
-                                    <ul class="errorlist">
+                                    <div class="invalid-feedback">
                                         {% for error in form.first_name.errors %}
-                                            <li class="text-danger">{{ error }}</li>
+                                            <p>{{ error }}</p>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% endif %}
                             </div>
                             
                             <!-- Soyad -->
                             <div class="form-group">
                                 <label for="last_name">Soyad:</label>
-                                <input type="text" name="last_name" id="last_name" class="form-control" value="{{ form.last_name.value|default_if_none:'' }}" required>
+                                <input type="text" name="last_name" id="last_name" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" value="{{ form.last_name.value|default_if_none:'' }}" required>
                                 {% if form.last_name.errors %}
-                                    <ul class="errorlist">
+                                    <div class="invalid-feedback">
                                         {% for error in form.last_name.errors %}
-                                            <li class="text-danger">{{ error }}</li>
+                                            <p>{{ error }}</p>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% endif %}
                             </div>
                             
                             <!-- Şehir -->
                             <div class="form-group">
                                 <label for="city">Şehir:</label>
-                                <input type="text" name="city" id="city" class="form-control" value="{{ form.city.value|default_if_none:'' }}" required>
+                                <input type="text" name="city" id="city" class="form-control {% if form.city.errors %}is-invalid{% endif %}" value="{{ form.city.value|default_if_none:'' }}" required>
                                 {% if form.city.errors %}
-                                    <ul class="errorlist">
+                                    <div class="invalid-feedback">
                                         {% for error in form.city.errors %}
-                                            <li class="text-danger">{{ error }}</li>
+                                            <p>{{ error }}</p>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% endif %}
                             </div>
                             
                             <!-- İlçe -->
                             <div class="form-group">
                                 <label for="district">İlçe:</label>
-                                <input type="text" name="district" id="district" class="form-control" value="{{ form.district.value|default_if_none:'' }}" required>
+                                <input type="text" name="district" id="district" class="form-control {% if form.district.errors %}is-invalid{% endif %}" value="{{ form.district.value|default_if_none:'' }}" required>
                                 {% if form.district.errors %}
-                                    <ul class="errorlist">
+                                    <div class="invalid-feedback">
                                         {% for error in form.district.errors %}
-                                            <li class="text-danger">{{ error }}</li>
+                                            <p>{{ error }}</p>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% endif %}
                             </div>
                             
                             <!-- Telefon -->
                             <div class="form-group">
                                 <label for="phone">Telefon:</label>
-                                <input type="text" name="phone" id="phone" class="form-control" value="{{ form.phone.value|default_if_none:'' }}" required>
+                                <input type="text" name="phone" id="phone" class="form-control {% if form.phone.errors %}is-invalid{% endif %}" value="{{ form.phone.value|default_if_none:'' }}" required>
                                 {% if form.phone.errors %}
-                                    <ul class="errorlist">
+                                    <div class="invalid-feedback">
                                         {% for error in form.phone.errors %}
-                                            <li class="text-danger">{{ error }}</li>
+                                            <p>{{ error }}</p>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% endif %}
                             </div>
                             
                             <!-- E-posta -->
                             <div class="form-group">
                                 <label for="email">E-posta:</label>
-                                <input type="email" name="email" id="email" class="form-control" value="{{ form.email.value|default_if_none:'' }}" required>
+                                <input type="email" name="email" id="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" value="{{ form.email.value|default_if_none:'' }}" required>
                                 {% if form.email.errors %}
-                                    <ul class="errorlist">
+                                    <div class="invalid-feedback">
                                         {% for error in form.email.errors %}
-                                            <li class="text-danger">{{ error }}</li>
+                                            <p>{{ error }}</p>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% endif %}
                             </div>
                             
                             <!-- Parola -->
                             <div class="form-group">
                                 <label for="password1">Parola:</label>
-                                <input type="password" name="password1" id="password1" class="form-control" required>
+                                <input type="password" name="password1" id="password1" class="form-control {% if form.password1.errors %}is-invalid{% endif %}" required>
                                 <small class="form-text text-muted">
                                     Parolanız diğer kişisel bilgilerinizle çok benzer olamaz.<br>
                                     Parolanız en az 8 karakter içermelidir.<br>
@@ -132,25 +132,25 @@
                                     Parolanız tamamen sayısal olamaz.
                                 </small>
                                 {% if form.password1.errors %}
-                                    <ul class="errorlist">
+                                    <div class="invalid-feedback">
                                         {% for error in form.password1.errors %}
-                                            <li class="text-danger">{{ error }}</li>
+                                            <p>{{ error }}</p>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% endif %}
                             </div>
                             
                             <!-- Parola Tekrar -->
                             <div class="form-group">
                                 <label for="password2">Parola (Tekrar):</label>
-                                <input type="password" name="password2" id="password2" class="form-control" required>
+                                <input type="password" name="password2" id="password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" required>
                                 <small class="form-text text-muted">Doğrulama için parolanızı tekrar girin.</small>
                                 {% if form.password2.errors %}
-                                    <ul class="errorlist">
+                                    <div class="invalid-feedback">
                                         {% for error in form.password2.errors %}
-                                            <li class="text-danger">{{ error }}</li>
+                                            <p>{{ error }}</p>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% endif %}
                             </div>
                             

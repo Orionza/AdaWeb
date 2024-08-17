@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,28 +13,75 @@
 
     <div class="container mt-5">
         <h2>Ödeme Ekranı</h2>
-        <form method="post" action="{% url 'payment' police_id=police.id %}">
+        
+        <!-- Genel hata mesajlarını göster -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
+        <!-- Formu render et -->
+        <form method="post">
             {% csrf_token %}
+            
             <div class="form-group">
                 <label for="kredi_kart_no">Kredi Kartı No:</label>
-                <input type="text" class="form-control" id="kredi_kart_no" name="kredi_kart_no" required>
+                {{ form.kredi_kart_no }}
+                {% if form.kredi_kart_no.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.kredi_kart_no.errors %}
+                            <li class="text-danger">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
+            
             <div class="form-group">
                 <label for="kredi_kart_sahibi">Kredi Kartı Sahibi:</label>
-                <input type="text" class="form-control" id="kredi_kart_sahibi" name="kredi_kart_sahibi" required>
+                {{ form.kredi_kart_sahibi }}
+                {% if form.kredi_kart_sahibi.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.kredi_kart_sahibi.errors %}
+                            <li class="text-danger">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
+            
             <div class="form-group">
                 <label for="son_kullanma_tarihi">Son Kullanma Tarihi (MM/YY):</label>
-                <input type="text" class="form-control" id="son_kullanma_tarihi" name="son_kullanma_tarihi" required>
+                {{ form.son_kullanma_tarihi }}
+                {% if form.son_kullanma_tarihi.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.son_kullanma_tarihi.errors %}
+                            <li class="text-danger">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
+            
             <div class="form-group">
                 <label for="cvv">CVV:</label>
-                <input type="text" class="form-control" id="cvv" name="cvv" required>
+                {{ form.cvv }}
+                {% if form.cvv.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.cvv.errors %}
+                            <li class="text-danger">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
+            
             <div class="form-group">
                 <label for="odeme_tutari">Sepet Tutarı:</label>
                 <input type="text" class="form-control" id="odeme_tutari" name="odeme_tutari" value="{{ police.prim }}" readonly>
             </div>
+            
             <button type="submit" class="btn btn-primary">Ödeme Yap</button>
         </form>
     </div>
