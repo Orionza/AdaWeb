@@ -22,3 +22,4 @@ class MyUserAdmin(UserAdmin):
     filter_horizontal = ('groups', 'user_permissions')
 
 admin.site.register(MyUser, MyUserAdmin)
+#son

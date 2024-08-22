@@ -51,7 +51,7 @@ class DaskBilgileriAdmin(admin.ModelAdmin):
 
 
 
-# Alternatif olarak register yöntemiyle de modelleri ekleyebilirsiniz:
+# Alternatif olarak register yöntemiyle de modelleri ekleyebilirdim.:
 # admin.site.register(Police, PoliceAdmin)
 # admin.site.register(AracBilgileri, AracBilgileriAdmin)
 # admin.site.register(OdemeBilgileri, OdemeBilgileriAdmin)

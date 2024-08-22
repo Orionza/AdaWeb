@@ -184,3 +184,4 @@ class DaskBilgileri(models.Model):
 
     def __str__(self):
         return f"DASK - {self.police_no.police_no}"
+#

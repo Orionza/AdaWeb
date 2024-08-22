@@ -15,3 +15,4 @@ urlpatterns = [
     path('payment/<int:police_id>/', payment, name='payment'),  # Burada services.views'den gelen payment fonksiyonu kullanılıyor
     path('payment_success/<int:police_id>/', payment_success, name='payment_success'),  # Aynı şekilde
 ]
+#son

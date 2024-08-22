@@ -373,7 +373,7 @@ def dask_detail(request):
 
 
 def hesapla_dask_fiyati(dask_bilgileri):
-    # Fiyat hesaplama işlemi
+    # Fiyat hesaplama işlemim
     fiyat = (
         dask_bilgileri.bina_alani * 10 +
         dask_bilgileri.kat_sayisi * 50 +

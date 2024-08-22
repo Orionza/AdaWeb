@@ -64,3 +64,4 @@ class PaymentForm(forms.Form):
         if not data.isdigit() or len(data) != 3:
             raise forms.ValidationError("CVV numarası 3 haneli bir sayı olmalıdır.")
         return data
+#

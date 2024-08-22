@@ -12,3 +12,4 @@ urlpatterns = [
     path('plan/select/<int:plan_id>/', views.plan_select, name='plan_select'),
     path('dask_detail/', views.dask_detail, name='dask_detail'),
 ]
+#son

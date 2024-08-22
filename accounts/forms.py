@@ -54,3 +54,4 @@ class UserRegistrationForm(UserCreationForm):
         if len(phone) != 10 or not phone.isdigit():
             raise ValidationError('Telefon numarası 10 haneli bir sayı olmalıdır.')
         return phone
+#son

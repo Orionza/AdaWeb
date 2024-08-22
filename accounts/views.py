@@ -115,7 +115,7 @@ def odeme_yap(request, police_id):
         odeme_tutari = police.prim
 
         if kredi_kart_no and kredi_kart_sahibi and son_kullanma_tarihi and cvv:
-            # Ödeme bilgilerini kaydet
+            # Ödeme bilgilerini kaydet.
             OdemeBilgileri.objects.create(
                 police_no=police,
                 odeme_tutari=odeme_tutari,
@@ -153,3 +153,4 @@ def iptal_et(request, police_id):
         messages.error(request, "Bu poliçe bulunamadı veya size ait değil.")
         return redirect('user_profile')  # Profil sayfasına yönlendir
 
+#son
