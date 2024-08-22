@@ -27,7 +27,7 @@ class AracBilgileriForm(forms.ModelForm):
     class Meta:
         model = AracBilgileri
         fields = '__all__'
-    
+    """
     def clean_plaka_il_kodu(self):
         plaka_il_kodu = self.cleaned_data.get('plaka_il_kodu')
         if not (10 <= plaka_il_kodu <= 99):
@@ -39,7 +39,7 @@ class AracBilgileriForm(forms.ModelForm):
         if not (plaka_kodu[:3].isalpha() and plaka_kodu[:3].isupper() and plaka_kodu[3:].isdigit() and len(plaka_kodu) == 5):
             raise forms.ValidationError("Plaka kodu 3 harf ve 2 rakamdan oluşmalıdır. Örneğin: ABC12")
         return plaka_kodu
-
+    """
 
 class PaymentForm(forms.Form):
     kredi_kart_no = forms.CharField(min_length=11, max_length=11, label='Kredi Kartı No')

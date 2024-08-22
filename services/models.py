@@ -49,7 +49,7 @@ class AracBilgileri(models.Model):
     teklif_fiyati = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
-        verbose_name_plural = 'Poliçe Araç Bilgileri'
+        verbose_name_plural = 'Araç Poliçe Bilgileri'
 
     def __str__(self):
         return f"{self.police_no.police_no} - {self.plaka_kodu}"

@@ -23,7 +23,7 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item {% if request.path == '/accounts/user_profile/' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'user_profile' %}">{{ user.first_name }}</a>
+                    <a class="nav-link" href="{% url 'user_profile' %}">Poliçelerim</a>
                 </li>
                 <li class="nav-item {% if request.path == '/accounts/logout/' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'logout' %}">Çıkış</a>

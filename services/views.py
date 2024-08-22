@@ -34,26 +34,26 @@ def get_offer(request):
         motor_no = request.POST.get('motor_no')
         sasi_no = request.POST.get('sasi_no')
 
-        # Hata mesajları için boş bir liste oluşturun
+        
         error_messages = []
 
-        # plaka_il_kodu'nun geçerli olup olmadığını kontrol edin
+        
         if not plaka_il_kodu or not plaka_il_kodu.isdigit() or not (10 <= int(plaka_il_kodu) <= 99):
             error_messages.append("Plaka il kodu 2 basamaklı bir sayı olmalıdır.")
 
-        # Plaka kodunun geçerli olup olmadığını kontrol edin
+        
         if not plaka_kodu or len(plaka_kodu) > 7 or not any(char.isdigit() for char in plaka_kodu) or not any(char.isalpha() for char in plaka_kodu):
             error_messages.append("Plaka kodu maksimum 7 karakter uzunluğunda olmalı ve en az bir harf ile en az bir rakam içermelidir.")
 
-        # Motor No'nun geçerli olup olmadığını kontrol edin
+        
         if not motor_no or len(motor_no) != 15 or not motor_no.isalnum():
             error_messages.append("Motor numarası 15 karakter uzunluğunda olmalı ve sadece harf ve rakam içermelidir.")
 
-        # Şasi No'nun geçerli olup olmadığını kontrol edin
+        
         if not sasi_no or len(sasi_no) != 17 or not sasi_no.isalnum():
             error_messages.append("Şasi numarası 17 karakter uzunluğunda olmalı ve sadece harf ve rakam içermelidir.")
 
-        # Eğer hata mesajı varsa, formu tekrar render edin ve hata mesajlarını gösterin
+        
         if error_messages:
             return render(request, 'services/kasko_detail.html', {
                 'markalar': Vehicle.objects.values_list('marka_adi', flat=True).distinct(),
@@ -76,11 +76,11 @@ def get_offer(request):
             kasko_degeri = None
             teklif_fiyati = None
 
-        # Eğer teklif fiyatı hesaplanamamışsa, geçerli bir değeri varsayılan olarak atayabilirsiniz
+        
         if teklif_fiyati is None:
             teklif_fiyati = 0
 
-        # Benzersiz bir police_no oluştur
+        
         police_no = random.randint(10000000, 99999999)
         while Police.objects.filter(police_no=police_no).exists():
             police_no = random.randint(10000000, 99999999)
@@ -141,7 +141,7 @@ def payment(request, police_id):
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
-            # Form valid ise ödeme bilgilerini işleyin
+            
             kredi_kart_no = form.cleaned_data['kredi_kart_no']
             kredi_kart_sahibi = form.cleaned_data['kredi_kart_sahibi']
             son_kullanma_tarihi = form.cleaned_data['son_kullanma_tarihi']
@@ -159,7 +159,7 @@ def payment(request, police_id):
                 odeme_tarihi=timezone.now(),
             )
 
-            # Poliçe başlangıç tarihini ödeme tarihi olarak güncelle
+            # Poliçe başlangıç tarihini ödeme tarihi olarak değiştirdim
             police.baslangic_tarihi = timezone.now()
             police.bitis_tarihi = police.baslangic_tarihi + timezone.timedelta(days=365)
             police.status = 'P'

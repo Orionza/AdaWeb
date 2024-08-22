@@ -38,6 +38,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
 
     objects = MyUserManager()
+    class Meta:
+        verbose_name_plural = 'Kullanıcılar'
 
 
     USERNAME_FIELD = 'Id_No'
